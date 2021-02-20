@@ -5,6 +5,7 @@
  */
 package Application;
 
+import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,7 +17,7 @@ import javafx.stage.Stage;
  * @author W-E-R
  */
 public class Program extends Application {
-    
+
     private static Stage stage;
 
     public static Stage getStage() {
@@ -26,16 +27,20 @@ public class Program extends Application {
     public static void setStage(Stage stage) {
         Program.stage = stage;
     }
-    
+
+
     @Override
-    public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/View/FXMLVisualizar.fxml"));
-        
-        Scene scene = new Scene(root);
-        
-        stage.setScene(scene);
-        stage.show();
-        setStage(stage);
+    public void start(Stage primaryStage) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/FXMLMain.fxml"));
+            Parent parent = loader.load();
+            Scene mainScene = new Scene(parent);
+            primaryStage.setScene(mainScene);
+            primaryStage.setTitle("Sample JavaFX application");
+            primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -44,5 +49,5 @@ public class Program extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }
