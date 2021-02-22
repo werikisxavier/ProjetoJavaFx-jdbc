@@ -38,7 +38,7 @@ public class FXMLMainController implements Initializable {
 
     @FXML
     public void onMenuItemDepartmentAction() {
-        System.out.println("onMenuItemDepartmentAction");
+        loadView("/gui/view/FXMLDepartmentList.fxml");
     }
 
     @FXML
@@ -64,6 +64,10 @@ public class FXMLMainController implements Initializable {
             mainVBox.getChildren().clear();
             mainVBox.getChildren().add(mainMenu);
             mainVBox.getChildren().addAll(newVBox.getChildren());
+            
+            
+            
+           
 
         } catch (IOException ex) {
             Alerts.showAlert("IO Exception", null, ex.getMessage(), Alert.AlertType.ERROR);
