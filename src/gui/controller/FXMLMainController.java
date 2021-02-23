@@ -23,49 +23,50 @@ import javafx.scene.layout.VBox;
 import model.services.DepartmentService;
 
 public class FXMLMainController implements Initializable {
-
+    
     @FXML
     private MenuItem menuItemSeller;
-
+    
     @FXML
     private MenuItem menuItemDepartment;
-
+    
     @FXML
     private MenuItem menuItemAbout;
-
+    
     @FXML
     public void onMenuItemSellerAction() {
         System.out.println("onMenuItemSellerAction");
     }
-
+    
     @FXML
     public void onMenuItemDepartmentAction() {
         loadView("/gui/view/FXMLDepartmentList.fxml", (FXMLDepartmentListController controller) -> {
             controller.setDepartmentservice(new DepartmentService());
             controller.updateTableView();
         });
-              
+        
     }
-
+    
     @FXML
     public void onMenuItemAboutAction() {
-        loadView("/gui/view/FXMLAbout.fxml", x -> {});
+        loadView("/gui/view/FXMLAbout.fxml", x -> {
+        });
     }
-
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        
     }
-
+    
     private synchronized <T> void loadView(String absoluteName, Consumer<T> initializeAction) {
-
+        
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
             VBox newVBox = loader.load();
-
+            
             Scene mainScene = Program.getMainScene();
             VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
-
+            
             Node mainMenu = mainVBox.getChildren().get(0);
             mainVBox.getChildren().clear();
             mainVBox.getChildren().add(mainMenu);
@@ -73,12 +74,11 @@ public class FXMLMainController implements Initializable {
             
             T controller = loader.getController();
             initializeAction.accept(controller);
-
+            
         } catch (IOException ex) {
             Alerts.showAlert("IO Exception", null, ex.getMessage(), Alert.AlertType.ERROR);
         }
-
+        
     }
-
     
 }
