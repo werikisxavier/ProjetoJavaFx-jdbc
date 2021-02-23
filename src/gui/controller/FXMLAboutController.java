@@ -26,7 +26,7 @@ public class FXMLAboutController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Stage stage = (Stage) Program.getMainScene().getWindow();
-        VBoxAbout.prefWidthProperty().bind(stage.heightProperty());
+        VBoxAbout.prefHeightProperty().bind(stage.heightProperty());
 
     }
 
