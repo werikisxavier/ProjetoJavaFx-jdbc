@@ -10,6 +10,7 @@ import gui.util.Alerts;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,7 +21,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import model.services.DepartmentService;
-
 
 public class FXMLMainController implements Initializable {
 
@@ -40,14 +40,16 @@ public class FXMLMainController implements Initializable {
 
     @FXML
     public void onMenuItemDepartmentAction() {
-        loadView2("/gui/view/FXMLDepartmentList.fxml");
-        
-        
+        loadView("/gui/view/FXMLDepartmentList.fxml", (FXMLDepartmentListController controller) -> {
+            controller.setDepartmentservice(new DepartmentService());
+            controller.updateTableView();
+        });
+              
     }
 
     @FXML
     public void onMenuItemAboutAction() {
-        loadView("/gui/view/FXMLAbout.fxml");
+        loadView("/gui/view/FXMLAbout.fxml", x -> {});
     }
 
     @Override
@@ -55,27 +57,7 @@ public class FXMLMainController implements Initializable {
 
     }
 
-    private synchronized void loadView(String absoluteName) {
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
-            VBox newVBox = loader.load();
-
-            Scene mainScene = Program.getMainScene();
-            VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
-
-            Node mainMenu = mainVBox.getChildren().get(0);
-            mainVBox.getChildren().clear();
-            mainVBox.getChildren().add(mainMenu);
-            mainVBox.getChildren().addAll(newVBox.getChildren());
-
-        } catch (IOException ex) {
-            Alerts.showAlert("IO Exception", null, ex.getMessage(), Alert.AlertType.ERROR);
-        }
-
-    }
-    
-private synchronized void loadView2(String absoluteName) {
+    private synchronized <T> void loadView(String absoluteName, Consumer<T> initializeAction) {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
@@ -89,13 +71,14 @@ private synchronized void loadView2(String absoluteName) {
             mainVBox.getChildren().add(mainMenu);
             mainVBox.getChildren().addAll(newVBox.getChildren());
             
-            FXMLDepartmentListController controller = loader.getController();
-            controller.setDepartmentservice(new DepartmentService());
-            controller.updateTableView();
+            T controller = loader.getController();
+            initializeAction.accept(controller);
 
         } catch (IOException ex) {
             Alerts.showAlert("IO Exception", null, ex.getMessage(), Alert.AlertType.ERROR);
         }
 
     }
+
+    
 }
