@@ -5,11 +5,14 @@
  */
 package gui.controller;
 
+import Application.Program;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 /**
  *
@@ -18,17 +21,13 @@ import javafx.scene.control.Button;
 public class FXMLAboutController implements Initializable {
 
     @FXML
-    private Button btVoltar;
-    
-    @FXML 
-    private void onButtonBtVoltarAction(){
-        System.out.println("Voltou");
-    }
-    
+    private VBox VBoxAbout;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        
+        Stage stage = (Stage) Program.getMainScene().getWindow();
+        VBoxAbout.prefWidthProperty().bind(stage.heightProperty());
+
     }
-    
+
 }
