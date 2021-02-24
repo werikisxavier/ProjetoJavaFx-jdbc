@@ -1,17 +1,26 @@
 package gui.controller;
 
 import Application.Program;
+import gui.util.Alerts;
+import gui.util.Utils;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Department;
 import model.services.DepartmentService;
@@ -39,8 +48,9 @@ public class FXMLDepartmentListController implements Initializable {
     private Button btNew;
 
     @FXML
-    private void onBtNewAction() {
-        System.out.println("onBtNewAction");
+    private void onBtNewAction(ActionEvent event) {
+        Stage parentStage = Utils.currentStage(event);
+        createDialogForm("/gui/view/FXMLDepartmentForm.fxml", parentStage);
     }
 
     @Override
@@ -69,4 +79,24 @@ public class FXMLDepartmentListController implements Initializable {
         tableViewDepartment.setItems(obsList);
     }
 
+    
+    private void createDialogForm(String absolutName, Stage parentStage){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(absolutName));
+            Pane newPane = loader.load();
+               
+            //vou abrir um palco na frente do outro
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Enter Department data");
+            dialogStage.setScene(new Scene(newPane));
+            dialogStage.setResizable(false);
+            dialogStage.initOwner(parentStage); //pai da minha nova Cena
+            dialogStage.initModality(Modality.WINDOW_MODAL);//travar tela
+            dialogStage.showAndWait();
+            
+        } catch (IOException e) {
+            Alerts.showAlert("IO Exception", "Erro laoding view", e.getMessage(), Alert.AlertType.ERROR);
+        }
+        
+    }
 }

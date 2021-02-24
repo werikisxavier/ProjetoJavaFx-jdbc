@@ -10,7 +10,10 @@ public class DepartmentService {
 
     public List<Department> findAll() {
         DepartmentDao departmentDao = DaoFactory.createDepartmentDao();
-        
+
         return departmentDao.findAll();
     }
+    
+    
+    
 }
