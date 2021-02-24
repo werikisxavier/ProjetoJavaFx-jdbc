@@ -10,7 +10,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -18,7 +17,7 @@ import javafx.stage.Stage;
  *
  * @author W-E-R
  */
-public class FXMLAboutController implements Initializable {
+public class AboutController implements Initializable {
 
     @FXML
     private VBox VBoxAbout;

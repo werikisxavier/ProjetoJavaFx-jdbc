@@ -25,7 +25,7 @@ import javafx.stage.Stage;
 import model.entities.Department;
 import model.services.DepartmentService;
 
-public class FXMLDepartmentListController implements Initializable {
+public class DepartmentListController implements Initializable {
 
     private DepartmentService departmentService;
 
