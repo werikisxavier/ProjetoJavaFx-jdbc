@@ -1,6 +1,7 @@
 package gui.controller;
 
 import Application.Program;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
 import java.io.IOException;
@@ -25,7 +26,7 @@ import javafx.stage.Stage;
 import model.entities.Department;
 import model.services.DepartmentService;
 
-public class DepartmentListController implements Initializable {
+public class DepartmentListController implements Initializable,DataChangeListener {
 
     private DepartmentService departmentService;
 
@@ -89,6 +90,7 @@ public class DepartmentListController implements Initializable {
             DepartmentFormController controller = loader.getController();
             controller.setDepartment(department);
             controller.setDepartmentService(new DepartmentService());
+            controller.subscribeDataChangeListenrs(this);
             controller.updateFormData();
             
             //vou abrir um palco na frente do outro
@@ -104,5 +106,10 @@ public class DepartmentListController implements Initializable {
             Alerts.showAlert("IO Exception", "Erro laoding view", e.getMessage(), Alert.AlertType.ERROR);
         }
         
+    }
+
+    @Override
+    public void onDataChanged() {
+        updateTableView();
     }
 }

@@ -1,13 +1,14 @@
 package gui.controller;
 
 import db.DbException;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Utils;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,7 +16,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import model.entities.Department;
 import model.services.DepartmentService;
 
@@ -55,6 +55,8 @@ public class DepartmentFormController implements Initializable {
         try {
             department = getFormData();
             departmentService.saveOrUpdate(department);
+            notifyDataChangeListeners();
+            Alerts.showAlert("Confirmation", null, "Department save of success", Alert.AlertType.INFORMATION);
             Utils.currentStage(event).close();
 
         } catch (DbException e) {
@@ -67,7 +69,13 @@ public class DepartmentFormController implements Initializable {
     private Department department;
 
     private DepartmentService departmentService;
+    
+    private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
+    public void subscribeDataChangeListenrs(DataChangeListener listener) {
+        dataChangeListeners.add(listener);
+    }
+    
     public void setDepartment(Department department) {
         this.department = department;
     }
@@ -106,6 +114,12 @@ public class DepartmentFormController implements Initializable {
         tfId.setText(String.valueOf(department.getId()));
         tfName.setText(department.getName());
 
+    }
+
+    private void notifyDataChangeListeners() {
+        for (DataChangeListener listener : dataChangeListeners) {
+            listener.onDataChanged();
+        }
     }
 
 }
